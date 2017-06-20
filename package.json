@@ -1,0 +1,23 @@
+{
+  "name": "bookshelf-experiments",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "3.3.5",
+    "bookshelf": "0.10.3",
+    "knex": "0.12.9",
+    "lodash": "4.17.4",
+    "node-uuid": "1.4.8",
+    "pg": "6.1.5"
+  },
+  "devDependencies": {
+    "chai": "4.0.2",
+    "mocha": "3.4.2"
+  }
+}

@@ -22,23 +22,10 @@ const Group = bookshelf.model('Group', {
     return Group
       .collection()
       .query(function(qb) {
-        qb.debug(true);
         qb.leftJoin(GroupMember.TABLE_NAME, `${Group.TABLE_NAME}.id`, `${GroupMember.TABLE_NAME}.${GroupMember.FK_GROUP}`);
         qb.where(attrs);
       })
       .fetch({ withRelated: ['members'], require: true });
-  },
-
-  getWithInvitedMember: function(type, value) {
-    return Group.getAllWithMember(type, value, Group.GroupMember().STATUS.INVITED);
-  },
-
-  getWithJoinedMember: function(type, value) {
-    return Group.getAllWithMember(type, value, Group.GroupMember().STATUS.JOINED);
-  },
-
-  getWithLeftMember: function(type, value) {
-    return Group.getAllWithMember(type, value, Group.GroupMember().STATUS.LEFT);
   },
 
   GroupMember: () => bookshelf.model('GroupMember')

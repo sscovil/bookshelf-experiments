@@ -1,34 +1,27 @@
 'use strict';
 
-const _ = require('lodash');
 const bookshelf = require('../bookshelf');
 
-const TABLE_NAME = 'groups';
-
 const Group = bookshelf.model('Group', {
-  tableName: TABLE_NAME,
+  tableName: 'groups',
   hasTimestamps: true,
 
   members: function() {
-    return this.hasMany('GroupMember');
+    return this.hasMany('GroupMember', 'group_id');
   }
 }, {
-  TABLE_NAME,
-
   getAllWithMember(member) {
-    const GroupMember = Group.GroupMember();
-    const attrs = _.mapKeys(member.pick('type', 'value', 'status'), (value, key) => `${GroupMember.TABLE_NAME}.${key}`);
+    const groupIds = bookshelf.model('GroupMember')
+      .query()
+      .select('group_id')
+      .where('type', member.get('type'))
+      .where('value', member.get('value'))
+      .where('type', member.get('status'));
 
     return Group
-      .collection()
-      .query(function(qb) {
-        qb.leftJoin(GroupMember.TABLE_NAME, `${Group.TABLE_NAME}.id`, `${GroupMember.TABLE_NAME}.${GroupMember.FK_GROUP}`);
-        qb.where(attrs);
-      })
-      .fetch({ withRelated: ['members'], require: true });
-  },
-
-  GroupMember: () => bookshelf.model('GroupMember')
+      .where('id', 'IN', groupIds)
+      .fetchAll({ withRelated: ['members'] });
+  }
 });
 
 module.exports = Group;

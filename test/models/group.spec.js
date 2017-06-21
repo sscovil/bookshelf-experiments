@@ -105,12 +105,14 @@ describe('Group', function() {
     });
   });
 
-  describe('generated SQL', function() {
+  describe('.getAllWithMember', function() {
     let member;
+    let memberValue;
     let results;
 
     beforeEach(function() {
       member = _.sample(members);
+      memberValue = member.get('value');
 
       return Group
         .getAllWithMember(member)
@@ -119,8 +121,9 @@ describe('Group', function() {
 
     it('fetches all groups with a specific member', function() {
       results.forEach(result => {
-        expect(result.related('members').toJSON()).to.be.an('array').with.lengthOf(MEMBERS_PER_GROUP);
-        expect(result.related('members').pluck('value')).to.include(member.get('value'));
+        const relatedMembers = result.related('members');
+        expect(relatedMembers.toJSON()).to.be.an('array').with.lengthOf(MEMBERS_PER_GROUP);
+        expect(relatedMembers.pluck('value')).to.include(memberValue);
       });
     });
   });

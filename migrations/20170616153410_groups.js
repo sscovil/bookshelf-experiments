@@ -1,10 +1,8 @@
 'use strict';
 
-const Group = require('../src/db/models/group');
-
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable(Group.TABLE_NAME, table => {
+    knex.schema.createTable('groups', table => {
       table.increments('id');
       table.string('name');
       table.timestamps(/*useTimestamps=*/true, /*defaultToNow=*/true);
@@ -15,6 +13,6 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-    knex.schema.dropTable(Group.TABLE_NAME)
+    knex.schema.dropTable('groups')
   ]);
 };
